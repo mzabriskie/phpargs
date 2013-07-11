@@ -35,7 +35,7 @@ class CliArgParserTest extends TestCase {
     }
 
     function testMixedArrayOptions() {
-        $parser = new CliArgParser(array('script.php', '-a', 'a', '-a', 'b', '-b', '--alpha', 'c'));
+        $parser = new CliArgParser(array('script.php', '-a', 'a', '-a', 'b', '-b', '--alpha=c'));
 
         $arr = $parser->getValue('a', 'alpha');
         $this->assertEquals(3, sizeof($arr));
@@ -61,7 +61,7 @@ class CliArgParserTest extends TestCase {
     }
 
     function testMultipleOptions() {
-        $parser = new CliArgParser(array('script.php', '-a', 'a', '--bravo', 'b'));
+        $parser = new CliArgParser(array('script.php', '-a', 'a', '--bravo=b'));
 
         $this->assertEquals('a', $parser->getValue('a', 'alpha'));
         $this->assertEquals('b', $parser->getValue('b', 'bravo'));

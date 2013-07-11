@@ -63,23 +63,25 @@ class CliArgParser {
             if ($short > 0) return $this->getArg($short);
             else return $this->getArg(sizeof($this->args) + $short);
         } else {
-            $opts = array();
-            if (!is_null($short)) $opts[] = '-' . $short;
-            if (!is_null($long)) $opts[] = '--' . $long;
+            $value = array();
 
-            if (sizeof($opts) > 0) {
-                $value = array();
-
-                // Look for value(s) of option
-                for ($i=0; $i<sizeof($this->args); $i++) {
-                    if (in_array($this->args[$i], $opts) && $this->args[$i+1]{0} != '-') {
-                        $value[] = $this->args[++$i];
+            // Look for value(s) of option
+            for ($i=0; $i<sizeof($this->args); $i++) {
+                // Check short option using format -o value
+                if (!is_null($short) && $this->args[$i] == ('-' . $short) && $this->args[$i+1]{0} != '-') {
+                    $value[] = $this->args[++$i];
+                }
+                // Check long option using format --option=value
+                else if (!is_null($long) && strpos($this->args[$i], '--' . $long) === 0) {
+                    $parts = preg_split('/=/', $this->args[$i]);
+                    if (sizeof($parts) > 1) {
+                        $value[] = $parts[1];
                     }
                 }
+            }
 
-                if (sizeof($value) > 0) {
-                    return sizeof($value) == 1 ? $value[0] : $value;
-                }
+            if (sizeof($value) > 0) {
+                return sizeof($value) == 1 ? $value[0] : $value;
             }
         }
 
