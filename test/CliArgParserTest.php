@@ -4,10 +4,12 @@ require_once(dirname(__FILE__) . '/../src/CliArgParser.php');
 
 class CliArgParserTest extends TestCase {
     function testBooleanOptions() {
-        $parser = new CliArgParser(array('script.php', '-a', '-b', 'abc', '-c'));
+        $parser = new CliArgParser(array('script.php', '-a', '-b', 'abc', '-c', '--foo=bar'));
 
         $this->assertTrue($parser->hasOption('a'));
+        $this->assertTrue($parser->hasOption('b'));
         $this->assertTrue($parser->hasOption('c'));
+        $this->assertTrue($parser->hasOption('f', 'foo'));
         $this->assertEquals('abc', $parser->getValue('b'));
     }
 

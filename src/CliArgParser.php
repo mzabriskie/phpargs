@@ -48,9 +48,13 @@ class CliArgParser {
         if (!is_null($short) && in_array('-' . $short, $this->args)) return true;
         if (!is_null($long) && in_array('--' . $long, $this->args)) return true;
 
-        // Look for joined short option (e.g., -rf)
         for ($i=0; $i<sizeof($this->args); $i++) {
-            if ($this->args[$i]{1} != '-' && strpos($this->args[$i], $short) > -1) {
+            // Look for joined short option (e.g., -rf)
+            if (!is_null($short) && $this->args[$i]{1} != '-' && strpos($this->args[$i], $short) > -1) {
+                return true;
+            }
+            // Look for long option with value (e.g., --foo=bar)
+            else if (!is_null($long) && strpos($this->args[$i], '--' . $long) === 0) {
                 return true;
             }
         }
