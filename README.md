@@ -9,10 +9,12 @@ CLI Argument Parser for PHP
 #!/usr/bin/php
 <?php
 
+require 'CliArgParser.php';
+
 function help() {
-	echo 'Usage: example [options] &lt;input&gt; &lt;output&gt;' . PHP_EOL . PHP_EOL .
+	echo 'Usage: example [options] <input> <output>' . PHP_EOL . PHP_EOL .
 			'Options:' . PHP_EOL .
-			'	-r					recursively process files within &lt;input&gt;' . PHP_EOL .
+			'	-r					recursively process files within <input>' . PHP_EOL .
 			'	-f					attempt to process without confirmation' . PHP_EOL .
 			'	-v					be verbose while processing' . PHP_EOL .
 			'	-h, --help			dislay this help and exit' . PHP_EOL;
