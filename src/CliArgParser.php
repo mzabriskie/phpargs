@@ -28,6 +28,11 @@ class CliArgParser {
     private $args;
     private $extra;
 
+    /**
+     * Constructs a CliArgParser object using the array specified as the args
+     *
+     * @param array $args The $argv provided from php's cli
+     */
     function __construct($args) {
         $this->args = array();
         $this->extra = array();
@@ -43,6 +48,13 @@ class CliArgParser {
         }
     }
 
+    /**
+     * Determine whether or not an option has been specified
+     *
+     * @param string|number $short The short option value (e.g., 'h', 'v', etc.)
+     * @param string [$long] The long option value (e.g., 'help', 'version', etc.)
+     * @return bool True if the option has been specified, otherwise false
+     */
     function hasOption($short, $long = null) {
         // Look for explicit options
         if (!is_null($short) && in_array('-' . $short, $this->args)) return true;
@@ -62,6 +74,48 @@ class CliArgParser {
         return false;
     }
 
+    /**
+     * Get the value of an option if it has been specified
+     *
+     * <p>
+     * If <code>short</code> is a number <code>getValue</code> will treat it as the index of the value to retrieve.
+     *
+     * Example:
+     *  $ ./myscript foo bar baz
+     *
+     *  $parser = new CliArgParser($argv);
+     *  $parser->getValue(1) -> returns 'foo'
+     *  $parser->getValue(2) -> returns 'bar'
+     *  $parser->getValue(3) -> returns 'baz'
+     *
+     * <p>
+     * You can also use a negative value for <code>short</code>.
+     *
+     * Example:
+     *  $ ./myscript -r -f -v input.txt output.txt
+     *
+     *  $parser = new CliArgParser($argv);
+     *  $parser->getValue(-2) -> returns 'input.txt'
+     *  $parser->getValue(-1) -> returns 'output.txt'
+     *
+     * <p>
+     * Short options can be combined, or specified individually
+     *
+     * Example:
+     *  $ ./myscript -r -f -v input.txt output.txt
+     *  $ ./myscript -rfv input.txt output.txt
+     *
+     * <p>
+     * Option values can be passed using short or long options
+     *
+     * Example:
+     *  $ ./myscript -f input.txt
+     *  $ ./myscript --file=input.txt
+     *
+     * @param string|number $short The short option value (e.g., 'n', 'f', etc.)
+     * @param string [$long] The long option value (e.g., 'name', 'file', etc.)
+     * @return string|null The value of the option if it has been specified, otherwise null
+     */
     function getValue($short, $long = null) {
         if (is_numeric($short)) {
             if ($short > 0) return $this->getArg($short);
@@ -92,6 +146,16 @@ class CliArgParser {
         return null;
     }
 
+    /**
+     * Get any extra args specified after --
+     *
+     * Example:
+     *  $ ./myscript --foo abc --bar 123 -- --baz
+     *
+     * <code>getExtraArgs<code> on the command above would return <code>array('--baz')</code>
+     *
+     * @return array The extra args passed to the script
+     */
     function getExtraArgs() {
         return $this->extra;
     }
