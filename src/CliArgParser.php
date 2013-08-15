@@ -118,7 +118,7 @@ class CliArgParser {
      */
     function getValue($short, $long = null) {
         if (is_numeric($short)) {
-            if ($short > 0) return $this->getArg($short);
+            if ($short >= 0) return $this->getArg($short);
             else return $this->getArg(sizeof($this->args) + $short);
         } else {
             $value = array();

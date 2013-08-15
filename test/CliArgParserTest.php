@@ -72,6 +72,7 @@ class CliArgParserTest extends TestCase {
     function testValueFromIndex() {
         $parser = new CliArgParser(array('script.php', 'foo', 'bar'));
 
+        $this->assertEquals('script.php', $parser->getValue(0));
         $this->assertEquals('foo', $parser->getValue(1));
         $this->assertEquals('bar', $parser->getValue(2));
         $this->assertEquals('foo', $parser->getValue(-2));
