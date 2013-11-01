@@ -24,6 +24,7 @@ THE SOFTWARE.
 
  */
 
+if (!class_exists('CliArgParser', false)) {
 class CliArgParser {
     private $args;
     private $extra;
@@ -60,7 +61,7 @@ class CliArgParser {
         if (!is_null($short) && in_array('-' . $short, $this->args)) return true;
         if (!is_null($long) && in_array('--' . $long, $this->args)) return true;
 
-        for ($i=0; $i<sizeof($this->args); $i++) {
+        for ($i=1; $i<sizeof($this->args); $i++) {
             // Look for joined short option (e.g., -rf)
             if (!is_null($short) && $this->args[$i]{1} != '-' && strpos($this->args[$i], $short) > -1) {
                 return true;
@@ -84,6 +85,7 @@ class CliArgParser {
      *  $ ./myscript foo bar baz
      *
      *  $parser = new CliArgParser($argv);
+     *  $parser->getValue(0) -> returns './myscript'
      *  $parser->getValue(1) -> returns 'foo'
      *  $parser->getValue(2) -> returns 'bar'
      *  $parser->getValue(3) -> returns 'baz'
@@ -164,4 +166,5 @@ class CliArgParser {
         if ($index < 0 || $index >= sizeof($this->args)) throw new InvalidArgumentException();
         return $this->args[$index];
     }
+}
 }
