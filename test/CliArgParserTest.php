@@ -55,6 +55,24 @@ class CliArgParserTest extends TestCase {
         $this->assertEquals('c', $arr[1]);
     }
 
+    function testHasLongOptions() {
+        $parser = new CliArgParser(array('script.php', '--fool=faz', '--bart=baz'));
+
+        $this->assertTrue(!$parser->hasOption('f', 'foo'));
+        $this->assertTrue($parser->hasOption('f', 'fool'));
+        $this->assertTrue(!$parser->hasOption('b', 'bar'));
+        $this->assertTrue($parser->hasOption('b', 'bart'));
+    }
+
+    function testGetLongOptions() {
+        $parser = new CliArgParser(array('script.php', '--fool=faz', '--bart=baz'));
+
+        $this->assertEquals($parser->getValue('f', 'foo'), null);
+        $this->assertEquals($parser->getValue('b', 'bar'), null);
+        $this->assertEquals($parser->getValue('f', 'fool'), 'faz');
+        $this->assertEquals($parser->getValue('b', 'bart'), 'baz');
+    }
+
     function testCombinedShortOptions() {
         $parser = new CliArgParser(array('script.php', '-fb', 'foo'));
 

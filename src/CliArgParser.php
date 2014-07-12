@@ -67,7 +67,7 @@ class CliArgParser {
                 return true;
             }
             // Look for long option with value (e.g., --foo=bar)
-            else if (!is_null($long) && strpos($this->args[$i], '--' . $long) === 0) {
+            else if ($this->checkLongOption($long, $i)) {
                 return true;
             }
         }
@@ -77,6 +77,19 @@ class CliArgParser {
 
     /**
      * Get the value of an option if it has been specified
+     *
+     * <p>
+     * Get value using either short or long options.
+     *
+     * Example:
+     *  $ ./myscript -f input.txt
+     *
+     *  - OR -
+     *
+     *  $ ./myscript --file=input.txt
+     *
+     *  $parser = new CliArgParser($argv);
+     *  $parser->getValue('f', 'file') -> returns 'input.txt'
      *
      * <p>
      * If <code>short</code> is a number <code>getValue</code> will treat it as the index of the value to retrieve.
@@ -132,7 +145,7 @@ class CliArgParser {
                     $value[] = $this->args[++$i];
                 }
                 // Check long option using format --option=value
-                else if (!is_null($long) && strpos($this->args[$i], '--' . $long) === 0) {
+                else if ($this->checkLongOption($long, $i)) {
                     $parts = preg_split('/=/', $this->args[$i]);
                     if (sizeof($parts) > 1) {
                         $value[] = $parts[1];
@@ -165,6 +178,10 @@ class CliArgParser {
     private function getArg($index) {
         if ($index < 0 || $index >= sizeof($this->args)) throw new InvalidArgumentException();
         return $this->args[$index];
+    }
+
+    private function checkLongOption($long, $index) {
+        return !is_null($long) && strpos($this->args[$index], '--' . $long . '=') === 0;
     }
 }
 }
